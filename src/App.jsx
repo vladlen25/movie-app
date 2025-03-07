@@ -1,6 +1,7 @@
 import './App.css'
 import Search from './components/Search.jsx'
 import { useEffect, useState } from 'react'
+import Loader from './components/Loader.jsx'
 
 function App() {
   const API_BASE_URL = 'https://api.themoviedb.org/3'
@@ -15,7 +16,7 @@ function App() {
 
   const [searchTerm, setSearchTerm] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [movieList, setMovieList] = useState([])
 
   const fetchMovies = async () => {
@@ -36,7 +37,10 @@ function App() {
       console.error('Error fetching movies:', e)
       setErrorMessage('Error fetching movies. Please try again later')
     } finally {
-      setIsLoading(false)
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 5000);
+
     }
   }
 
@@ -57,7 +61,7 @@ function App() {
         <section className="all-movies">
           <h2>All Movies</h2>
           {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-          {isLoading ? <p className="text-white">Loading...</p> : (
+          {isLoading ? <Loader/> : (
             <ul>
               {movieList.length > 0 ? (
                 movieList.map((movie) => (
